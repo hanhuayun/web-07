@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">	
+		*{
+			margin:0;
+			padding:0;
+		}
+		#banner{
+			margin:0 auto;
+			height:20px;
+			width:100%;
+			position:absolute;
+			left:0px;
+			top:0px;
+			overflow:hidden;
+			background-color:rgb(204,204,204);
+		}
+		p{
+			font-size:13px;
+			color:rgb(252,22,12);
+		}
+		#word{
+			margin:0 auto;
+			width:1200px;
+			height:20px;
+		}
+		#titleimg{
+			margin-top:2px;
+			margin-left: 100px;
+		}
+		#alert{
+			width:1000px;
+			margin-left:70px;
+			display:inline-block;
+			overflow:hidden;
+		}
+		#main{
+			margin-left:600px;
+			width:350px;
+		}
+		#box{
+			width:1200px;
+			height:382px;
+			border:1px solid red;
+			margin:100px auto;
+			margin-top:20px;
+			position:relative;
+			overflow:hidden;
+		}
+		.slider{
+			width:8400px;
+			position:absolute;
+			left:-1200px;
+		}
+		.slide{
+			width:1200px;
+			overflow:hidden;
+			float:left;
+		}
+		.slide>img{
+			width:1200px;
+			height:382px;
+		}
+		.box>span{
+			display:block;
+			width:30px;
+			height:50px;
+			text-align:center;
+			cursor:pointer;
+			color:#ccc;
+			top:175px;
+			line-height:50px;
+			background:rgb(255,0,0);
+			font-size:30px;
+			position:absolute;
+			opacity:0;
+		}
+		#left{
+			left:30px;
+		}
+		#right{
+			right:30px;
+		}
+		.nav{
+			position:absolute;
+			left:500px;
+			bottom:20px;
+			list-style: none;
+		}
+		.nav>li{
+			float:left;
+			width:20px;
+			height:20px;
+			background:#ccc;
+			cursor:pointer;
+			margin:0 10px;
+			border-radius:50%;
+		}
+		.nav .active{
+			background:red;
+		}
+	</style>
+</head>
+<body>
+	<div class="banner" id="banner">
+		<div id="word">
+			<img src=".././images/a15.png" id="titleimg">
+			<div id="alert">
+				<div id="main" style="margin-left: 600px;">
+					<p id="message">[温馨提示]最近有不少不法分子在网上骗人，请大家注意！！</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="box" id="box">
+		<div class="slider" id="slider">
+			<div class="slide"><img src=".././images/b5.png"></div>
+			<div class="slide"><img src=".././images/b1.png"></div>
+			<div class="slide"><img src=".././images/b2.png"></div>
+			<div class="slide"><img src=".././images/b3.png"></div>
+			<div class="slide"><img src=".././images/b4.png"></div>
+			<div class="slide"><img src=".././images/b5.png"></div>
+			<div class="slide"><img src=".././images/b1.png"></div>
+		</div>
+		<span id="left"><</span>
+		<span id="right">></span>
+		<ul class="nav" id="nav">
+			<li class="active"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</body>
+<script src="animate.js"></script>
+<script type="text/javascript">
+	var main=document.getElementById("main");
+	var message=document.getElementById("message");
+	function move(){
+		if(parseInt(main.style.marginLeft)<=-350){
+			main.style.marginLeft=600+"px";
+		}
+		else{
+			main.style.marginLeft=parseInt(main.style.marginLeft)-2+"px";
+		}
+	}
+	setInterval(move,30);
+
+
+	var box=document.getElementById("box");
+	var oNavlist=document.getElementById("nav").children;
+	var slider=document.getElementById("slider");
+	var left=document.getElementById("left");
+	var right=document.getElementById("right");
+	var index=0;
+	var timer;
+	var isMoving=false;
+	function next(){
+		if(isMoving==true){
+			return ;
+		}
+		isMoving=true;
+		index++;
+		navRed();
+		animate(slider,{left:-1200*index},function(){
+			if(index===6){
+				slider.style.left="-1200px";
+				index=1;
+			}
+			isMoving=false;
+		});
+	}
+	function prev(){
+		if(isMoving==true){
+			return;
+		}
+		isMoving=true;
+		index--;
+		navRed();
+		animate(slider,{left:-1200*index},function(){
+			if(index===0){
+				slider.style.left="-6000px";
+				index=5;
+			}
+			isMoving=false;
+		});
+	}
+	var timer=setInterval(next,3000); 
+	box.onmouseover=function(){
+		animate(left,{opacity:50});
+		animate(right,{opacity:50});
+		clearInterval(timer);
+	} 
+
+	box.onmouseout=function(){
+		animate(left,{opacity:0});
+		animate(right,{opacity:0});
+		timer=setInterval(next,3000);
+	} 
+
+	right.onclick=next;
+	left.onclick=prev;
+
+	for(var i=0;i<oNavlist.length;i++){
+		oNavlist[i].idx=i; 
+		oNavlist[i].onclick=function(){
+			index=this.idx+1;
+			navRed();
+			animate(slider,{left:-1200*index});
+		}
+	}
+
+	function navRed(){
+		for(var i=0;i<oNavlist.length;i++){
+			oNavlist[i].className="";
+		}
+		if(index===6){
+			oNavlist[0].className="active";
+		}
+		else if(index===0){
+			oNavlist[4].className="active";
+		}
+		else{
+			oNavlist[index-1].className="active";
+		}
+	}
+
+</script>
+</html>
+
+<!-- 滚动通知效果:
+
+消息自右向左进行滚动，超出范围则消失，可以完成循环滚动过程。
+
+轮播图效果：
+
+轮播图可以每隔3秒进行自动的切换，点击标签时也可以完成切换效果，鼠标移动到图所在区域时，会出现上一页，下一页图标，点击可以完成上一页，下一页切换。
+
+要求：轮播图设置每个轮播项宽度1200px，将实现页面提交到GitHub，提交GitHub访问该页面的地址， 并将页面的完整代码以代码块形式提交。（HTML、CSS、JS分三个代码块）
+
+提示：轮播切换动画效果可以借助素材提供的animate.js来实现，提供教学视频，可以参考视频中给出的实现思路。页面效果在素材中。 -->
